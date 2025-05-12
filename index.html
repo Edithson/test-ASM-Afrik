@@ -30,7 +30,7 @@
     <!-- Modal Etablissement -->
     <div class="modal fade" id="etablissementModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content mod_edt">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle">Ajouter un établissement</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -56,7 +56,7 @@
                         <button type="button" class="btn btn-success" id="saveEtablissement">Enregistrer</button>
                     </form>
                     <!-- Modal classe -->
-                    <div class="mt-4">
+                    <div class="mt-4" id="classesSection" style="display: none;">
                         <h5>Liste des classes <button class="btn btn-secondary btn-sm float-right" id="addClassButton" data-toggle="modal" data-target="#classModal">Ajouter une classe</button></h5>
                         <table class="table table-bordered mt-2">
                             <thead>
@@ -82,7 +82,7 @@
     <!-- Modal classe -->
     <div class="modal fade" id="classModal" tabindex="-1" aria-labelledby="classModalTitle" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content mod_classe">
                 <div class="modal-header">
                     <h5 class="modal-title" id="classModalTitle">Ajouter une classe</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -109,7 +109,7 @@
                     </form>
 
                     <!-- Liste des élèves -->
-                    <div class="mt-4">
+                    <div class="mt-4" id="elevesSection" style="display: none;">
                         <h5>Liste des élèves <button class="btn btn-secondary btn-sm float-right" id="addStudentButton" data-toggle="modal" data-target="#studentModal">Ajouter un élève</button></h5>
                         <table class="table table-bordered mt-2">
                             <thead>
@@ -137,7 +137,7 @@
     <!-- Modal élève -->
     <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalTitle" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content mod_eleve">
                 <div class="modal-header">
                     <h5 class="modal-title" id="studentModalTitle">Ajouter un élève</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -171,6 +171,25 @@
                         </div>
                         <button type="button" class="btn btn-success" id="saveStudent">Enregistrer</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- modal de suppression -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Supprimer</button>
                 </div>
             </div>
         </div>

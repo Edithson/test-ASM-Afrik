@@ -78,34 +78,46 @@ $(document).ready(function () {
     });
 
     // Suppression d'un établissement
-    function supprimerEtablissement(index) {
+    $(document).on("click", ".deleteEtablissement", function () {
+        const index = $(this).data("index");
         const etablissement = etablissements[index];
-        // Pour chaque classe de l'établissement, suppression des élèves
-        $.each(classes, function(index, classe) {
-            if (classe.id_etablissement == etablissement.id) {
-                $.each(eleves, function(index, eleve) {
-                    if (eleve.id_classe == classe.id) {
-                        eleves.splice(index, 1);
-                    }
-                });
-                classes.splice(index, 1);
-            }
-        });
-
-        // Suppression de l'établissement
-        etablissements.splice(index, 1);
-        currentClassIndex = null;
-        currentEtablissementIndex = null;
+        console.log(etablissement);
         
-        // Rafraîchissement de l'affichage
-        refreshTable();
-    }
+        if (confirm("Voulez-vous vraiment supprimer cet établissement ?")) {
+            // Récupération des classes de l'établissement
+            const classesEtablissement = classes.filter(classe => classe.id_etablissement == etablissement.id);
+            
+            // Pour chaque classe de l'établissement, suppression des élèves
+            $.each(classes, function(index, classe) {
+                if (classe.id_etablissement == etablissement.id) {
+                    $.each(eleves, function(index, eleve) {
+                        if (eleve.id_classe == classe.id) {
+                            eleves.splice(index, 1);
+                        }
+                    });
+                    classes.splice(index, 1);
+                }
+            });
+
+            // Suppression de l'établissement
+            etablissements.splice(index, 1);
+            currentClassIndex = null;
+            currentEtablissementIndex = null;
+            
+            // Rafraîchissement de l'affichage
+            refreshTable();
+        }
+    });
 
     // Suppression d'un élève
-    function supprimerEleve(index) {
-        eleves.splice(index, 1);
-        refreshStudentsTable();
-    }
+    $(document).on("click", ".deleteStudent", function () {
+        const index = $(this).data("index");
+    
+        if (confirm("Voulez-vous vraiment supprimer cet élève ?")) {
+            eleves.splice(index, 1);
+            refreshStudentsTable();
+        }
+    });
     
 
     $("#etablissementModal").on("hidden.bs.modal", function () {
@@ -191,11 +203,15 @@ $(document).ready(function () {
     });
 
     // Suppression d'une classe
-    function supprimerClasse(index) {
-        eleves = eleves.filter(eleve => eleve.id_classe !== classes[index].id);
-        classes.splice(index, 1);
-        refreshClassesTable();
-    }
+    $(document).on("click", ".deleteClass", function () {
+        const index = $(this).data("index");
+    
+        if (confirm("Voulez-vous vraiment supprimer cette classe ?")) {
+            eleves = eleves.filter(eleve => eleve.id_classe !== classes[index].id);
+            classes.splice(index, 1);
+            refreshClassesTable();
+        }
+    });
 
     $("#classModal").on("hidden.bs.modal", function () {
         $("#classModalTitle").text("Ajouter une classe");
@@ -326,44 +342,40 @@ $(document).ready(function () {
     
     let deleteCallback = null; // Stocke la fonction de suppression à exécuter
 
-    // Lorsqu'on clique sur un bouton de suppression, afficher le modal de confirmation
-    $(document).on("click", ".deleteEtablissement, .deleteClass, .deleteStudent", function () {
-        const type = $(this).hasClass("deleteEtablissement") ? "etablissement" :
-                    $(this).hasClass("deleteClass") ? "classe" : "eleve";
-        const index = $(this).data("index");
+// Lorsqu'on clique sur un bouton de suppression, afficher le modal de confirmation
+$(document).on("click", ".deleteEtablissement, .deleteClass, .deleteStudent", function () {
+    const type = $(this).hasClass("deleteEtablissement") ? "etablissement" :
+                 $(this).hasClass("deleteClass") ? "classe" : "eleve";
+    const index = $(this).data("index");
 
-        // Définir la fonction de suppression à exécuter après confirmation
-        if (type === "etablissement") {
-            deleteCallback = function () {
-                supprimerEtablissement(index)
-            };
-        } else if (type === "classe") {
-            deleteCallback = function () {
-                supprimerClasse(index)
-            };
-        } else if (type === "eleve") {
-            deleteCallback = function () {
-                supprimerEleve(index)
-            };
-        }
+    // Définir la fonction de suppression à exécuter après confirmation
+    if (type === "etablissement") {
+        deleteCallback = function () {
+            etablissements.splice(index, 1);
+            refreshTable();
+        };
+    } else if (type === "classe") {
+        deleteCallback = function () {
+            etablissements[currentEtablissementIndex].classes.splice(index, 1);
+            refreshClassesTable();
+        };
+    } else if (type === "eleve") {
+        deleteCallback = function () {
+            etablissements[currentEtablissementIndex].classes[currentClassIndex].eleves.splice(index, 1);
+            refreshStudentsTable();
+        };
+    }
 
-        $("#confirmDeleteModal").modal("show"); // Afficher le modal de confirmation
-    });
+    $("#confirmDeleteModal").modal("show"); // Afficher le modal de confirmation
+});
 
-    // Lorsque l'utilisateur confirme la suppression
-    $("#confirmDeleteButton").click(function () {
-        if (deleteCallback) {
-            deleteCallback(); // Exécuter la suppression
-        }
-        $("#confirmDeleteModal").modal("hide"); // Fermer le modal
-    });
-
-    $(document).on("hidden.bs.modal", function (event) {
-        if ($(".modal.show").length) { 
-            $("body").addClass("modal-open"); // Empêche la suppression du scroll
-        }
-    });
-
+// Lorsque l'utilisateur confirme la suppression
+$("#confirmDeleteButton").click(function () {
+    if (deleteCallback) {
+        deleteCallback(); // Exécuter la suppression
+    }
+    $("#confirmDeleteModal").modal("hide"); // Fermer le modal
+});
 
 
 });

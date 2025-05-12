@@ -1,0 +1,27 @@
+/* .mod_edt{
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.mod_classe{
+    z-index: 2;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.mod_eleve{
+    z-index: 3;
+    max-height: 90vh;
+    overflow-y: auto;
+} */
+
+.modal-dialog {
+    max-height: 90vh; /* Hauteur maximale */
+}
+
+.modal-content {
+    max-height: 90vh; /* Hauteur maximale pour le contenu */
+    overflow-y: auto; /* Ajout d'un scroll si le contenu dépasse */
+}
+
